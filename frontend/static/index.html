@@ -255,20 +255,27 @@ function flattenText(messages) {
 
 function renderReply(b, parts) {
   b.textContent = "";
-  const a2ui = parts.filter(p => p && p.kind === "a2ui" && p.data).map(p => p.data);
+  const a2ui = [];
   const plainTexts = [];
 
-  for (const p of parts) {
+  for (const p of parts || []) {
     if (!p) continue;
+    if (p.kind === "a2ui" && p.data) {
+      let d = p.data;
+      if (d && d.data && typeof d.data === "object") d = d.data;
+      a2ui.push(d);
+      continue;
+    }
     if (p.kind === "text" || (!p.kind && p.text)) {
       let txt = (p.text || "").trim();
-      const m = txt.match(/<(?:a2ui-json|a2a_datapart_json)>([\s\S]*?)<\/(?:a2ui-json|a2a_datapart_json)>/i);
+      const m = txt.match(/<(?:a2ui-json|a2a_datapart_json|a2ui)>([\s\S]*?)<\/(?:a2ui-json|a2a_datapart_json|a2ui)>/i);
       let jsonStr = m ? m[1].trim() : null;
       if (!jsonStr && (txt.startsWith("{") || txt.startsWith("["))) jsonStr = txt;
 
       if (jsonStr) {
         try {
-          const parsed = JSON.parse(jsonStr);
+          let parsed = JSON.parse(jsonStr);
+          if (parsed && parsed.data && typeof parsed.data === "object") parsed = parsed.data;
           if (parsed && (parsed.surfaceUpdate || parsed.beginRendering || parsed.components)) {
             a2ui.push(parsed);
             continue;
@@ -289,6 +296,7 @@ function renderReply(b, parts) {
   if (!b.childNodes.length) b.textContent = "(no response)";
   log.scrollTop = log.scrollHeight;
 }
+
 
 
 form.addEventListener("submit", async (ev) => {

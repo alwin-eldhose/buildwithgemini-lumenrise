@@ -97,7 +97,7 @@ def _extract_parts(parts: list) -> list[dict]:
         if "text" in p_dict and p_dict["text"]:
             txt = p_dict["text"].strip()
             # Check for <a2ui-json>...</a2ui-json> or <a2a_datapart_json>...</a2a_datapart_json>
-            m = re.search(r"<(?:a2ui-json|a2a_datapart_json)>(.*?)</(?:a2ui-json|a2a_datapart_json)>", txt, re.DOTALL)
+            m = re.search(r"<(?:a2ui-json|a2a_datapart_json|a2ui)>(.*?)</(?:a2ui-json|a2a_datapart_json|a2ui)>", txt, re.DOTALL | re.IGNORECASE)
             json_str = m.group(1).strip() if m else None
             if not json_str and (txt.startswith("{") or txt.startswith("[")):
                 json_str = txt
@@ -105,6 +105,8 @@ def _extract_parts(parts: list) -> list[dict]:
             if json_str:
                 try:
                     data_obj = json.loads(json_str)
+                    if isinstance(data_obj, dict) and "data" in data_obj and isinstance(data_obj["data"], dict):
+                        data_obj = data_obj["data"]
                     if isinstance(data_obj, dict) and ("surfaceUpdate" in data_obj or "beginRendering" in data_obj or "components" in data_obj):
                         out.append({"kind": "a2ui", "data": data_obj})
                         continue
@@ -117,8 +119,11 @@ def _extract_parts(parts: list) -> list[dict]:
         data_obj = p_dict.get("data")
         if data_obj and isinstance(data_obj, dict):
             a2ui_body = data_obj.get("data") or data_obj
+            if isinstance(a2ui_body, dict) and "data" in a2ui_body and isinstance(a2ui_body["data"], dict):
+                a2ui_body = a2ui_body["data"]
             out.append({"kind": "a2ui", "data": a2ui_body})
     return out
+
 
 
 
