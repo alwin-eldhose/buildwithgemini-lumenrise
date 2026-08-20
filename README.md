@@ -31,10 +31,13 @@ LumenRise leverages the full suite of **Google Cloud Agent Engine & Vertex AI** 
 | :--- | :--- |
 | 🧠 **Vertex AI Memory Bank** | Persists user profiles, preferences, and reflection history across multiple chat sessions. |
 | 🗄️ **Google Cloud Firestore** | Stores structured journal entries, session logs, and user activity history (`roles/datastore.user`). |
-| ☁️ **Google Cloud Storage (GCS)** | Hosts generated morning artwork images in a dedicated public media bucket (`roles/storage.objectAdmin`). |
+| ☁️ **Google Cloud Storage (GCS)** | Hosts generated morning artwork & audio files in a public media bucket (`roles/storage.objectAdmin`). |
+| 🌤️ **Live Weather API (Open-Meteo)** | Real-time live temperature, weather conditions, humidity, and wind speed lookup for any city. |
+| 🎵 **Ambient Audio Chimes** | Synthesizes serene pentatonic morning audio chimes uploaded to Cloud Storage and rendered via A2UI. |
 | 📚 **Vertex AI RAG Engine** | Grounded retrieval for curated literature, philosophical quotes, and mindfulness sources. |
-| 🖼️ **Gemini Imagen 3** | Generates custom scenic sunrise artwork based on user mood and prompts (`gemini-3.1-flash-lite-image`). |
-| 🎨 **A2UI Protocol (v0.8)** | Agent-to-User Interface JSON schema protocol streaming rich display cards directly to the custom frontend. |
+| 🖼️ **Gemini Imagen 3** | Generates custom scenic sunrise artwork based on user mood (`gemini-3.1-flash-lite-image`). |
+| 🎨 **A2UI Protocol (v0.8)** | Agent-to-User Interface JSON schema protocol streaming rich display cards and audio players directly to the web client. |
+
 
 ---
 

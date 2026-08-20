@@ -205,6 +205,18 @@ function buildNode(id, comps, seen) {
       if (!/^https?:\/\//i.test(src)) return null;
       const img = el("img", "a2img"); img.src = src; img.alt = boundStr(props.alt) || ""; return img;
     }
+    case "AudioPlayer":
+    case "Audio": {
+      const src = boundStr(props.url || props.src);
+      if (!/^https?:\/\//i.test(src)) return null;
+      const audio = el("audio", "a2audio");
+      audio.controls = true;
+      audio.src = src;
+      audio.style.marginTop = "8px";
+      audio.style.width = "100%";
+      return audio;
+    }
+
     case "Icon": {
       const s = el("span", "material-symbols-outlined"); s.textContent = iconName(boundStr(props.name) || props.name); return s;
     }

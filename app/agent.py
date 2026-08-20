@@ -28,6 +28,8 @@ from google.genai import types
 
 from app.a2ui_utils import a2ui_callback
 from app.artwork_tool import generate_morning_artwork
+from app.audio_tool import generate_morning_audio
+from app.weather_tool import get_weather
 from app.firestore_db import get_affirmations, save_user_journal_entry
 
 
@@ -41,19 +43,6 @@ async def generate_memories_callback(callback_context: CallbackContext):
         pass
     return None
 
-
-def get_weather(query: str) -> str:
-    """Simulates a web search. Use it get information on weather.
-
-    Args:
-        query: A string containing the location to get weather information for.
-
-    Returns:
-        A string with the simulated weather information for the queried location.
-    """
-    if "sf" in query.lower() or "san francisco" in query.lower():
-        return "It's 60 degrees and foggy."
-    return "It's 90 degrees and sunny."
 
 
 def get_current_time(query: str) -> str:
@@ -133,8 +122,10 @@ root_agent = Agent(
         get_affirmations,
         save_user_journal_entry,
         generate_morning_artwork,
+        generate_morning_audio,
         PreloadMemoryTool(),
     ],
+
     after_model_callback=a2ui_callback,
     after_agent_callback=generate_memories_callback,
 )
