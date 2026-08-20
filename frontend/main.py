@@ -95,19 +95,31 @@ def _extract_parts(parts: list) -> list[dict]:
             p_dict = {}
 
         if "text" in p_dict and p_dict["text"]:
-            out.append({"kind": "text", "text": p_dict["text"]})
+            txt = p_dict["text"].strip()
+            # Check for <a2ui-json>...</a2ui-json> or <a2a_datapart_json>...</a2a_datapart_json>
+            m = re.search(r"<(?:a2ui-json|a2a_datapart_json)>(.*?)</(?:a2ui-json|a2a_datapart_json)>", txt, re.DOTALL)
+            json_str = m.group(1).strip() if m else None
+            if not json_str and (txt.startswith("{") or txt.startswith("[")):
+                json_str = txt
+
+            if json_str:
+                try:
+                    data_obj = json.loads(json_str)
+                    if isinstance(data_obj, dict) and ("surfaceUpdate" in data_obj or "beginRendering" in data_obj or "components" in data_obj):
+                        out.append({"kind": "a2ui", "data": data_obj})
+                        continue
+                except Exception:
+                    pass
+
+            out.append({"kind": "text", "text": txt})
             continue
 
         data_obj = p_dict.get("data")
         if data_obj and isinstance(data_obj, dict):
-            meta = data_obj.get("metadata") or {}
-            mime = meta.get("mimeType") if isinstance(meta, dict) else None
             a2ui_body = data_obj.get("data") or data_obj
-            if mime == _A2UI_MIME:
-                out.append({"kind": "a2ui", "data": a2ui_body})
-            else:
-                out.append({"kind": "a2ui", "data": a2ui_body})
+            out.append({"kind": "a2ui", "data": a2ui_body})
     return out
+
 
 
 @app.post("/chat")
