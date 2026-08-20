@@ -1,10 +1,16 @@
 # 🌅 LumenRise — Mindful Morning AI Companion
 
-> A warm, supportive morning companion agent that delivers personalized, multimodal briefings, uplifting affirmations, custom scenic morning artwork, and interactive daily reflections tailored to your profile and mood.
+> A warm, supportive morning companion agent that delivers personalized, multimodal briefings, uplifting affirmations, live weather updates, ambient morning audio chimes, custom scenic morning artwork, and interactive daily reflections tailored to your profile and mood.
 
-![LumenRise Demo](./demo.gif)
+### 🎬 Live Demo Previews
+
+| 🌤️ & 🎵 Updated Demo (Live Weather & Audio Player) | 🎨 Initial Demo (Generative Scenic Artwork) |
+| :---: | :---: |
+| ![LumenRise Live Weather & Audio Demo](./demo_updated.gif) | ![LumenRise Artwork Demo](./demo.gif) |
+| 📹 [Download Video MP4](./lumenrise_updated_demo.mp4) | 📹 [Download Video MP4](./lumenrise_demo.mp4) |
 
 ---
+
 
 ## 🌟 Overview
 
