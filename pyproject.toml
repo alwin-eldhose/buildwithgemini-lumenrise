@@ -1,0 +1,81 @@
+[project]
+name = "lumenrise"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name", email = "your@email.com"},
+]
+
+dependencies = [
+    "google-adk[gcp,otel-gcp]>=2.5.0,<3.0.0",
+    "opentelemetry-resourcedetector-gcp<=1.12.0a0",
+    "gcsfs>=2024.11.0",
+    "a2a-sdk[http-server]>=1.0.0,<2.0.0",
+    "a2ui-agent-sdk>=0.4.0,<0.5.0",
+    "sse-starlette>=2.0.0",
+    "aiohttp>=3.13.4",
+    "google-cloud-logging>=3.12.0,<4.0.0",
+    "google-cloud-firestore>=2.19.0",
+]
+
+
+requires-python = ">=3.11,<3.14"
+
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2,<10.0.0",
+    "pytest-asyncio>=1.0.0,<2.0.0",
+    "ruff>=0.9.10,<1.0.0",
+]
+
+
+[tool.uv]
+override-dependencies = [
+    "a2a-sdk>=1.0.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "session"
+
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+
+[tool.agents-cli]
+type = "agent"
+framework = "google-adk"
+
+[tool.agents-cli.agent]
+entry_point = "app.agent:root_agent"
+model = "gemini-2.5-flash"
+title = "lumenrise"
+description = "A warm, personal morning companion."
+
+[tool.agents-cli.deploy.agent_runtime]
+location = "us-east1"
+min_instances = 0
+max_instances = 1
+memory = "1Gi"
+cpu = "1"
+concurrency = 8
+env_vars = { ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS = "false", GOOGLE_CLOUD_LOCATION = "global", GOOGLE_GENAI_USE_VERTEXAI = "true", OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = "NO_CONTENT" }
